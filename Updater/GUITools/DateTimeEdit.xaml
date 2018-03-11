@@ -1,0 +1,70 @@
+﻿<dxe:DateEdit x:Class="GUITools.DateTimeEdit"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+              xmlns:local="clr-namespace:GUITools"
+              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+              mc:Ignorable="d" d:DesignWidth="300" Height="30">
+    <dxe:DateEdit.Resources>
+        <ControlTemplate x:Key="ShowTime">
+            <StackPanel Orientation="Vertical" DataContext="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type local:DateTimeEdit}}}" Background="LightGray">
+                <dxe:DateEditCalendar DateTime="{Binding DateTime, Mode=TwoWay}" ShowClearButton="False" />
+                <Grid Margin="10,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Content="Now" Click="NowButtonClick" />
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                        <dxe:ButtonEdit MaskType="DateTime"  Mask="HH"  NullText="hh" MaskAutoComplete="Strong" MaskShowPlaceHolders="True" MaskUseAsDisplayFormat="True" 
+                                    EditValue="{Binding CurrentTime, Mode=TwoWay}" AllowDefaultButton="False" Height="50" >
+                            <dxe:ButtonEdit.Buttons>
+                                <dxe:SpinButtonInfo SpinUpClick="MakeHourUp" SpinDownClick="MakeHourDown"/>
+                            </dxe:ButtonEdit.Buttons>
+                        </dxe:ButtonEdit>
+
+                        <Label Content=":" VerticalContentAlignment="Center" />
+
+                        <dxe:ButtonEdit MaskType="DateTime"  Mask="mm"  NullText="mm" MaskAutoComplete="Strong" MaskShowPlaceHolders="True" MaskUseAsDisplayFormat="True" 
+                                    EditValue="{Binding CurrentTime, Mode=TwoWay}" AllowDefaultButton="False" Height="50" >
+                            <dxe:ButtonEdit.Buttons>
+                                <dxe:SpinButtonInfo SpinUpClick="MakeMinuteUp" SpinDownClick="MakeMinuteDown"/>
+                            </dxe:ButtonEdit.Buttons>
+                        </dxe:ButtonEdit>
+
+                        <Label Content=":" VerticalContentAlignment="Center" />
+
+                        <dxe:ButtonEdit MaskType="DateTime"  Mask="ss"  NullText="ss" MaskAutoComplete="Strong" MaskShowPlaceHolders="True" MaskUseAsDisplayFormat="True" 
+                                    EditValue="{Binding CurrentTime, Mode=TwoWay}" AllowDefaultButton="False" Height="50">
+                            <dxe:ButtonEdit.Buttons>
+                                <dxe:SpinButtonInfo SpinUpClick="MakeSecondUp" SpinDownClick="MakeSecondDown"/>
+                            </dxe:ButtonEdit.Buttons>
+                        </dxe:ButtonEdit>
+
+                        <Label Content="." VerticalContentAlignment="Center" />
+
+                        <dxe:ButtonEdit MaskType="DateTime"  Mask="fff"  NullText="fff" MaskAutoComplete="Strong" MaskShowPlaceHolders="True" MaskUseAsDisplayFormat="True" 
+                                    EditValue="{Binding CurrentTime, Mode=TwoWay}" AllowDefaultButton="False" Height="50">
+                            <dxe:ButtonEdit.Buttons>
+                                <dxe:SpinButtonInfo SpinUpClick="MakeMillisecondUp" SpinDownClick="MakeMillisecondDown"/>
+                            </dxe:ButtonEdit.Buttons>
+                        </dxe:ButtonEdit>
+                    </StackPanel>
+
+                </Grid>
+            </StackPanel>
+
+        </ControlTemplate>
+        <Style  TargetType="{x:Type local:DateTimeEdit}">
+            <Style.Triggers>
+                <Trigger Property="IsShowTimePanel"  Value="True">
+                    <Setter Property="PopupContentTemplate" Value="{StaticResource ShowTime}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </dxe:DateEdit.Resources>
+</dxe:DateEdit>

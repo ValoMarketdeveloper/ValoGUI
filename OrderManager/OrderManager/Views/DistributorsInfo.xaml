@@ -1,0 +1,82 @@
+﻿<Window x:Class="OrderManager.Views.DistributorsInfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OrderManager.Views"
+        mc:Ignorable="d"
+        Title="DistributorsInfo" MinHeight="500" MinWidth="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="85*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBlock Text="UPC: " HorizontalAlignment="Center" FontSize="14" FontWeight="Bold"/>
+            <TextBlock Text="{Binding UPC}" HorizontalAlignment="Center" FontSize="14" FontWeight="Bold"/>
+        </StackPanel>
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
+            <ListBox Name="lbDistributorsInfo" HorizontalContentAlignment="Stretch" ItemsSource="{Binding ListDistributors}"
+                     ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <ListBox.Template>
+                    <ControlTemplate>
+                        <DockPanel LastChildFill="True">
+                            <Grid DockPanel.Dock="Top" Height="30">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="350"></ColumnDefinition>
+                                    <ColumnDefinition Width="350"></ColumnDefinition>
+                                    <ColumnDefinition Width="100"></ColumnDefinition>
+                                    <ColumnDefinition Width="100"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" FontWeight="Bold" FontSize="14">Distributor</Label>
+                                <Label Grid.Column="1" FontWeight="Bold" FontSize="14">Description</Label>
+                                <Label Grid.Column="2" FontWeight="Bold" FontSize="14">UOM</Label>
+                                <Label Grid.Column="3" FontWeight="Bold" FontSize="14">Dimentions</Label>
+                            </Grid>
+                            <ItemsPresenter></ItemsPresenter>
+                        </DockPanel>
+                    </ControlTemplate>
+                </ListBox.Template>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="350"></ColumnDefinition>
+                                <ColumnDefinition Width="350"></ColumnDefinition>
+                                <ColumnDefinition Width="100"></ColumnDefinition>
+                                <ColumnDefinition Width="100"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="{Binding ProductInfo}"/>
+                                <TextBlock Grid.Row="1" Text="{Binding Vendor}" TextWrapping="Wrap"/>
+                                <TextBlock Grid.Row="2" Text="{Binding ProdID}"/>
+                            </Grid>
+                            <Grid Grid.Column="1" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="{Binding Title}" TextWrapping="Wrap"/>
+                                <TextBlock Grid.Row="1" Text="{Binding Description}" TextWrapping="Wrap"/>
+                            </Grid>
+                            <Grid Grid.Column="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="{Binding UOMDesc}"/>
+                                <TextBlock Grid.Row="1" Text="{Binding SizeDesc}"/>
+                            </Grid>
+                            <TextBlock Grid.Column="3" Text="{Binding WeightDesc}"></TextBlock>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+    </Grid>
+</Window>

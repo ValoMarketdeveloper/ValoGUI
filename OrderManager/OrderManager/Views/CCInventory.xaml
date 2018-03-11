@@ -1,0 +1,129 @@
+﻿<Window x:Class="OrderManager.Views.CCInventory"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:gt="clr-namespace:GUITools;assembly=GUITools"
+        xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:si="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+        xmlns:local="clr-namespace:OrderManager.Views"
+        mc:Ignorable="d"
+        Title="CCInventory" Height="500" Width="900">
+    <Window.Resources>
+        <Style x:Key="numberHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="Width" Value="100"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="93*" />
+        </Grid.RowDefinitions>
+        <Grid Margin="20,0,20,0" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="15*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="40*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="10*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Margin="5,0" Name="UPC" Grid.Column="0" GotFocus="UPC_GotFocus" LostFocus="UPC_LostFocus" Text="{Binding UPC, UpdateSourceTrigger=PropertyChanged}">
+                <dxmvvm:Interaction.Triggers>
+                    <dxmvvm:EventToCommand PassEventArgsToCommand="True" Command="{Binding CmdSearch}" 
+                                            EventName="KeyDown" />
+                </dxmvvm:Interaction.Triggers>
+            </TextBox>
+            <Button Grid.Column="1" Content="Search" Command="{Binding CmdSearch}" />
+            <TextBlock Grid.Column="2" Margin="5,0" Text="{Binding Title}" MinWidth="200" TextWrapping="Wrap" FontSize="12" FontWeight="Bold"/>
+            <TextBox Grid.Column="3" Margin="5,0" Name="Price" Text="{Binding Price}" GotFocus="Price_GotFocus" LostFocus="Price_LostFocus" />
+            <TextBox Grid.Column="4" Margin="5,0" Name="Qty" Text="{Binding Qty}" GotFocus="Qty_GotFocus" LostFocus="Qty_LostFocus" />
+            <TextBox Grid.Column="5" Margin="5,0" Name="UOM" Text="{Binding UOM}" GotFocus="UOM_GotFocus" LostFocus="UOM_LostFocus"/>
+            <Button Grid.Column="6" Content="Add" Command="{Binding CmdAdd}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+        </Grid>
+        <Grid Grid.Row="1" Margin="0,10,0,0">
+            <DataGrid Grid.Row="1" Name="Inventory" ItemsSource="{Binding CCInventoryList, UpdateSourceTrigger=PropertyChanged}"
+                  AutoGenerateColumns="False" Width="800" >
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="FontWeight"  Value="Bold" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header = "Title" Binding="{Binding Title}" IsReadOnly="True" MaxWidth="250">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                <Setter Property="TextBlock.FontSize" Value="12"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn Header="Image" Width="SizeToCells" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding URL}" MaxWidth="200" MaxHeight="100"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="UPC" HeaderStyle="{StaticResource numberHeaderStyle}" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Name="txtUPC" Text="{Binding UPC}" VerticalAlignment="Center" IsReadOnly="True">
+                                    <dxmvvm:Interaction.Triggers>
+                                        <dxmvvm:EventToCommand PassEventArgsToCommand="True" Command="{Binding CmdUPC}" 
+                                            EventName="KeyDown" />
+                                    </dxmvvm:Interaction.Triggers>
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Price" HeaderStyle="{StaticResource numberHeaderStyle}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Name="txtPrc" Text="{Binding Price}" VerticalAlignment="Center">
+                                    <dxmvvm:Interaction.Triggers>
+                                        <dxmvvm:EventToCommand PassEventArgsToCommand="True" Command="{Binding CmdPrice}" 
+                                            EventName="KeyDown" />
+                                    </dxmvvm:Interaction.Triggers>
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Qty" HeaderStyle="{StaticResource numberHeaderStyle}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Name="txtQty" Text="{Binding Qty}" VerticalAlignment="Center">
+                                    <dxmvvm:Interaction.Triggers>
+                                        <dxmvvm:EventToCommand PassEventArgsToCommand="True" Command="{Binding CmdQty}" 
+                                            EventName="KeyDown" />
+                                    </dxmvvm:Interaction.Triggers>
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="Width" Value="100"/>
+                            </Style>
+                        </DataGridTemplateColumn.HeaderStyle>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding CmdDelete}" HorizontalAlignment="Stretch" MinWidth="50" 
+                                    VerticalAlignment="Center">Delete</Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>

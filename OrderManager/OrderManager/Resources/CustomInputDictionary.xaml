@@ -1,0 +1,1205 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ct="clr-namespace:CommonTools;assembly=CommonTools"
+                    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+                    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+                    xmlns:gt="clr-namespace:GUITools;assembly=GUITools"
+                    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+                    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm">
+
+    <dx:BooleanToVisibilityConverter x:Key="boolToVis" Invert="False" />
+    <dx:BooleanToVisibilityConverter x:Key="invertBoolToVis" Invert="True"/>
+
+    <DataTemplate x:Key="textInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition >
+                    <ColumnDefinition.Style>
+                        <Style TargetType="ColumnDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="False">
+                                    <Setter Property="Width" Value="0"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Width" Value="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomTextEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ColumnDefinition.Style>
+                </ColumnDefinition>
+                <ColumnDefinition>
+                    <ColumnDefinition.Style>
+                        <Style TargetType="ColumnDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Width" Value="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomTextEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ColumnDefinition.Style>
+                </ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="False">
+                                    <Setter Property="Height" Value="0"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Height" Value="{Binding LabelHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Height" Value="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="1" IsTabStop="False"
+                   Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                   Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                   Height="23"/>
+            <Label Grid.Column="1" Grid.Row="0" IsTabStop="False"
+                   Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                   Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                   Height="{Binding LabelHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"/>
+            <ContentControl Grid.Column="1" Grid.Row="1" 
+                            HorizontalAlignment="Left" IsTabStop="False"
+                            DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsRequiredField, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="False">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <dxe:TextEdit x:Name="textInput" Grid.Column="1" HorizontalAlignment="Left" IsTabStop="True"
+                                                Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                                IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                                                Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                                                ToolTip="{Binding ErrorText, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                                TextWrapping="{Binding TextWrapping, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                                          />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsRequiredField, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Border BorderBrush="Red" BorderThickness="2">
+                                                <dxe:TextEdit x:Name="textInput" Grid.Column="1" HorizontalAlignment="Left" IsTabStop="True"
+                                                Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                                Height="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                                IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                                                Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                                                ToolTip="{Binding ErrorText, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="validatedTextInputField">
+        <Grid HorizontalAlignment="Stretch">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition >
+                    <ColumnDefinition.Style>
+                        <Style TargetType="ColumnDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="False">
+                                    <Setter Property="Width" Value="0"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Width" Value="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomTextEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ColumnDefinition.Style>
+                </ColumnDefinition>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="False">
+                                    <Setter Property="Height" Value="0"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Height" Value="{Binding LabelHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Height" Value="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+            </Grid.RowDefinitions>
+            <Label Grid.Column="0" Grid.Row="1" Height="23"
+                   Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" IsTabStop="False" />
+            <Label Grid.Column="1" Grid.Row="0" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" IsTabStop="False" />
+
+            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" KeyboardNavigation.IsTabStop="False">
+                <dxe:TextEdit x:Name="textInput" 
+                              HorizontalAlignment="Left" IsTabStop="True"
+                              Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                              IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                              Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                              ToolTip="{Binding Path=Text, RelativeSource={RelativeSource Self}}" />
+
+                <TextBlock FontSize="10" Margin="5,0,0,0" VerticalAlignment="Center" Visibility="{Binding IsValidationVisible, 
+                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}, Converter={StaticResource boolToVis}}"
+                           KeyboardNavigation.IsTabStop="False">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                             Value="RequiredAndEmpty">
+                                    <Setter Property="Text" Value="*" />
+                                    <Setter Property="FontSize" Value="12" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                             Value="Valid">
+                                    <Setter Property="Text" Value="&#x2713;" />
+                                    <Setter Property="FontSize" Value="10" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                             Value="Invalid">
+                                    <Setter Property="Text" Value="&#x2717;" />
+                                    <Setter Property="FontSize" Value="10" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="validatedEnhancedComboInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition >
+                    <ColumnDefinition.Style>
+                        <Style TargetType="ColumnDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="False">
+                                    <Setter Property="Width" Value="0"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Width" Value="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomComboEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ColumnDefinition.Style>
+                </ColumnDefinition>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="False">
+                                    <Setter Property="Height" Value="0"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Height" Value="{Binding LabelHeight, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomComboEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Height" Value="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomComboEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+            </Grid.RowDefinitions>
+            <Label Grid.Column="0" Grid.Row="1" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, 
+                AncestorType={x:Type gt:CustomComboEdit}}}" IsTabStop="False" Height="23"/>
+            <Label Grid.Column="1" Grid.Row="0" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, 
+                AncestorType={x:Type gt:CustomComboEdit}}}" IsTabStop="False" />
+
+            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" KeyboardNavigation.IsTabStop="False">
+                <gt:EnhancedComboBoxEdit x:Name="enhancedComboInput" AllowUpdateOnPopupClosed="True" HorizontalAlignment="Left"
+                                        IsTabStop="True" Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                        ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                        EditValue="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                                        IsTextEditable="{Binding IsTextEditable, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                                        DisplayMember="{Binding DisplayMember, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                        ToolTip="{Binding ErrorText, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"/>
+
+                <TextBlock FontSize="10" Margin="5,0,0,0" VerticalAlignment="Center" Visibility="{Binding IsValidationVisible, 
+                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}, Converter={StaticResource boolToVis}}"
+                           KeyboardNavigation.IsTabStop="False">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                             Value="RequiredAndEmpty">
+                                    <Setter Property="Text" Value="*" />
+                                    <Setter Property="FontSize" Value="12" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                             Value="Valid">
+                                    <Setter Property="Text" Value="&#x2713;" />
+                                    <Setter Property="FontSize" Value="10" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                             Value="Invalid">
+                                    <Setter Property="Text" Value="&#x2717;" />
+                                    <Setter Property="FontSize" Value="10" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="validatedDoubleTextInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" />
+                <ColumnDefinition Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" />
+                <ColumnDefinition Width="{Binding ContentWidth2, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDoubleTextEdit}}}" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Height="23" 
+                   Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" IsTabStop="False" />
+            <dxe:TextEdit x:Name="textInput" 
+                          Grid.Column="1" HorizontalAlignment="Left"
+                          Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                          Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                          IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                          ToolTip="{Binding Path=Text, RelativeSource={RelativeSource Self}}" />
+            <dxe:TextEdit x:Name="textInput2" 
+                          Grid.Column="2" HorizontalAlignment="Left"
+                          Width="{Binding ContentWidth2, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                          Text="{Binding Text2, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDoubleTextEdit}}}"
+                          IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                          ToolTip="{Binding Path=Text, RelativeSource={RelativeSource Self}}" />
+
+            <TextBlock Grid.Column="3" FontSize="10" Margin="5,0,0,0" 
+                       VerticalAlignment="Center" Visibility="{Binding IsValidationVisible, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}, Converter={StaticResource boolToVis}}">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                             Value="RequiredAndEmpty">
+                                <Setter Property="Text" Value="*" />
+                                <Setter Property="FontSize" Value="12" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                             Value="Valid">
+                                <Setter Property="Text" Value="&#x2713;" />
+                                <Setter Property="FontSize" Value="10" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                             Value="Invalid">
+                                <Setter Property="Text" Value="&#x2717;" />
+                                <Setter Property="FontSize" Value="10" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="passwordInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Height="23" 
+                   Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" />
+            <dxe:PasswordBoxEdit x:Name="passwordInput" 
+                          Grid.Column="1" HorizontalAlignment="Left"
+                          Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                          IsReadOnly="False"
+                          Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                          ToolTip="{Binding Path=Text, RelativeSource={RelativeSource Self}}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="validatedPasswordInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Height="23" 
+                   Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" />
+
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                <dxe:PasswordBoxEdit x:Name="passwordInput" 
+                               HorizontalAlignment="Left"
+                              Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                              IsReadOnly="False"
+                              Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"  />
+
+                <TextBlock FontSize="10" Margin="5,0,0,0" VerticalAlignment="Center" Visibility="{Binding IsValidationVisible, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}, Converter={StaticResource boolToVis}}">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                             Value="RequiredAndEmpty">
+                                    <Setter Property="Text" Value="*" />
+                                    <Setter Property="FontSize" Value="12" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                             Value="Valid">
+                                    <Setter Property="Text" Value="&#x2713;" />
+                                    <Setter Property="FontSize" Value="10" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                             Value="Invalid">
+                                    <Setter Property="Text" Value="&#x2717;" />
+                                    <Setter Property="FontSize" Value="10" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="numberTextInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition >
+                    <ColumnDefinition.Style>
+                        <Style TargetType="ColumnDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="False">
+                                    <Setter Property="Width" Value="0"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Width" Value="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomTextEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ColumnDefinition.Style>
+                </ColumnDefinition>
+                <ColumnDefinition>
+                    <ColumnDefinition.Style>
+                        <Style TargetType="ColumnDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Width" Value="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomTextEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ColumnDefinition.Style>
+                </ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="False">
+                                    <Setter Property="Height" Value="0"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Height" Value="{Binding LabelHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Height" Value="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="1" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, 
+                AncestorType={x:Type gt:CustomTextEdit}}}" IsTabStop="False"  Height="23"/>
+            <Label Grid.Column="1" Grid.Row="0" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, 
+                AncestorType={x:Type gt:CustomTextEdit}}}" IsTabStop="False" />
+
+            <ContentControl Grid.Column="1" Grid.Row="1" DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource Mode=FindAncestor, 
+                AncestorType={x:Type gt:CustomTextEdit}}}" HorizontalAlignment="Left" IsTabStop="False">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsRequiredField, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="False">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <dxe:TextEdit x:Name="textInput" 
+                                                HorizontalAlignment="Left" 
+                                                Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                                IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                                                Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                                                Mask="{Binding NumberMask, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomNumberTextEdit}}}"
+                                                MaskType="Numeric" MaskShowPlaceHolders="True" MaskAutoComplete="Strong" IsTabStop="True"
+                                                ToolTip="{Binding ErrorText, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsRequiredField, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Border BorderThickness="2" BorderBrush="Red">
+                                                <dxe:TextEdit x:Name="textInput" 
+                                                    HorizontalAlignment="Left"
+                                                    Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                                                    IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                                                    Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                                                    Mask="{Binding NumberMask, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomNumberTextEdit}}}"
+                                                    MaskType="Numeric" MaskShowPlaceHolders="True" MaskAutoComplete="Strong" IsTabStop="True"
+                                                    ToolTip="{Binding ErrorText, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="validatedNumberTextInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition >
+                    <ColumnDefinition.Style>
+                        <Style TargetType="ColumnDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="False">
+                                    <Setter Property="Width" Value="0"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Width" Value="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomTextEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ColumnDefinition.Style>
+                </ColumnDefinition>
+                <ColumnDefinition>
+                    <ColumnDefinition.Style>
+                        <Style TargetType="ColumnDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Width" Value="*"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ColumnDefinition.Style>
+                </ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="False">
+                                    <Setter Property="Height" Value="0"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Height" Value="{Binding LabelHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Height" Value="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="1" Height="23" 
+                   Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" />
+            <Label Grid.Column="1" Grid.Row="0" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" />
+
+            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
+                <ContentControl  DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" HorizontalAlignment="Left">
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsRequiredField, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                             Value="False">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <dxe:TextEdit x:Name="textInput" 
+                                                    HorizontalAlignment="Left"
+                                                    Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                                    IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                                                    Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                                                    Mask="{Binding NumberMask, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomNumberTextEdit}}}"
+                                                    MaskType="Numeric" MaskShowPlaceHolders="True" MaskAutoComplete="Strong" IsTabStop="True"
+                                                    ToolTip="{Binding ErrorText, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsRequiredField, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                             Value="True">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Border BorderThickness="2" BorderBrush="Red">
+                                                    <dxe:TextEdit x:Name="textInput" 
+                                                        HorizontalAlignment="Left"
+                                                        Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                                        IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                                                        Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                                                        Mask="{Binding NumberMask, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomNumberTextEdit}}}"
+                                                        MaskType="Numeric" MaskShowPlaceHolders="True" MaskAutoComplete="Strong" IsTabStop="True"
+                                                        ToolTip="{Binding ErrorText, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomTextEdit}}}" />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                </ContentControl>
+
+                <TextBlock FontSize="10" Margin="5,0,0,0" VerticalAlignment="Center" Visibility="{Binding IsValidationVisible, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}, Converter={StaticResource boolToVis}}">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                             Value="RequiredAndEmpty">
+                                    <Setter Property="Text" Value="*" />
+                                    <Setter Property="FontSize" Value="12" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                             Value="Valid">
+                                    <Setter Property="Text" Value="&#x2713;" />
+                                    <Setter Property="FontSize" Value="10" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                                             Value="Invalid">
+                                    <Setter Property="Text" Value="&#x2717;" />
+                                    <Setter Property="FontSize" Value="10" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="doubleTextInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" />
+                <ColumnDefinition Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" />
+                <ColumnDefinition Width="{Binding ContentWidth2, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDoubleTextEdit}}}" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Height="23" 
+                   Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" />
+            <dxe:TextEdit x:Name="textInput" 
+                          Grid.Column="1" HorizontalAlignment="Left"
+                          Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                          Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                          IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                          ToolTip="{Binding Path=Text, RelativeSource={RelativeSource Self}}" />
+            <dxe:TextEdit x:Name="textInput2" 
+                          Grid.Column="2" HorizontalAlignment="Left"
+                          Width="{Binding ContentWidth2, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}" 
+                          Text="{Binding Text2, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDoubleTextEdit}}}"
+                          IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomTextEdit}}}"
+                          ToolTip="{Binding Path=Text, RelativeSource={RelativeSource Self}}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="comboInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}" 
+                   IsTabStop="False" 
+                   Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                   Height="23"/>
+            <dxe:ComboBoxEdit x:Name="comboInput" 
+                              Grid.Column="1" HorizontalAlignment="Left" IsTabStop="True"
+                              Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                              Height="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                              ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                              SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                              DisplayMember="{Binding DisplayMember, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                              ToolTip="{Binding Path=DisplayText, RelativeSource={RelativeSource Self}}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="enhancedComboCustomItemTemplateInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Height="23" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}" IsTabStop="False" />
+            <gt:EnhancedComboBoxEdit x:Name="enhancedComboInput"
+                              AllowUpdateOnPopupClosed="True"
+                              Grid.Column="1" HorizontalAlignment="Left"
+                              Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                              Height="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                              ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                              EditValue="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                              DisplayMember="{Binding DisplayMember, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                              ItemTemplate="{Binding ItemTemplate, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="enhancedComboInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition >
+                    <ColumnDefinition.Style>
+                        <Style TargetType="ColumnDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="False">
+                                    <Setter Property="Width" Value="0"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Width" Value="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomComboEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ColumnDefinition.Style>
+                </ColumnDefinition>
+                <ColumnDefinition>
+                    <ColumnDefinition.Style>
+                        <Style TargetType="ColumnDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Width" Value="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomComboEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ColumnDefinition.Style>
+                </ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="False">
+                                    <Setter Property="Height" Value="0"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Height" Value="{Binding LabelHeight, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomComboEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Height" Value="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomComboEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="1" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, 
+                    AncestorType={x:Type gt:CustomComboEdit}}}" IsTabStop="False"
+                   Height="23"
+                   Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                   />
+            <Label Grid.Column="1" Grid.Row="0" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, 
+                AncestorType={x:Type gt:CustomComboEdit}}}" IsTabStop="False" />
+
+            <ContentControl Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" DataContext="{Binding DataContext, 
+                RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}" IsTabStop="False">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsRequiredField, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                AncestorType={x:Type gt:CustomComboEdit}}}" Value="False">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <gt:EnhancedComboBoxEdit x:Name="enhancedComboInput" AllowUpdateOnPopupClosed="True" HorizontalAlignment="Left"
+                                                IsTabStop="True" ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                                EditValue="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                                                IsTextEditable="{Binding IsTextEditable, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                                                DisplayMember="{Binding DisplayMember, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                                                Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                                                Height="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                                                ToolTip="{Binding ErrorText, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"/>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsRequiredField, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                AncestorType={x:Type gt:CustomComboEdit}}}" Value="True">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Border BorderBrush="Red" BorderThickness="2">
+                                                <gt:EnhancedComboBoxEdit x:Name="enhancedComboInput" AllowUpdateOnPopupClosed="True" HorizontalAlignment="Left"
+                                                IsTabStop="True" ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                                EditValue="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                                                IsTextEditable="{Binding IsTextEditable, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                                                DisplayMember="{Binding DisplayMember, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                                                Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                                                Height="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                                                ToolTip="{Binding ErrorText, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="validatedcomboWithCheckboxesInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition >
+                    <ColumnDefinition.Style>
+                        <Style TargetType="ColumnDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="False">
+                                    <Setter Property="Width" Value="0"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Width" Value="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomComboEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ColumnDefinition.Style>
+                </ColumnDefinition>
+                <ColumnDefinition>
+                    <ColumnDefinition.Style>
+                        <Style TargetType="ColumnDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HorizontalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Width" Value="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomComboEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ColumnDefinition.Style>
+                </ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="False">
+                                    <Setter Property="Height" Value="0"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Height" Value="{Binding LabelHeight, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomComboEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="RowDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VerticalLabel, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                         Value="True">
+                                    <Setter Property="Height" Value="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                        AncestorType={x:Type gt:CustomComboEdit}}}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="1" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, 
+                AncestorType={x:Type gt:CustomComboEdit}}}" IsTabStop="False" Height="23"/>
+            <Label Grid.Column="1" Grid.Row="0" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, 
+                AncestorType={x:Type gt:CustomComboEdit}}}" IsTabStop="False"/>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" KeyboardNavigation.IsTabStop="False">
+                <dxe:ComboBoxEdit x:Name="comboInput" Grid.Column="1" Grid.Row="1" IsTabStop="True" HorizontalAlignment="Left"
+                              Height="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                              Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}" 
+                              ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                              EditValue="{Binding SelectedItem, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                              DisplayMember="{Binding DisplayMember, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                              Tag="{Binding Path=ComboBoxEditTag, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                              IsTextEditable="{Binding IsTextEditable, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                              Foreground="{Binding ComboForeground, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                              FontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                              ShowEditorButtons="{Binding IsEditorShown, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}">
+                    <dxe:ComboBoxEdit.StyleSettings>
+                        <gt:EnhancedCheckedComboBoxStyleSettings />
+                    </dxe:ComboBoxEdit.StyleSettings>
+
+                    <dxmvvm:Interaction.Triggers>
+                        <dxmvvm:EventToCommand PassEventArgsToCommand="True" Command="{Binding PopupOpeningCommand, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" EventName="PopupOpened" />
+                        <dxmvvm:EventToCommand PassEventArgsToCommand="True" Command="{Binding PopupClosingCommand, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" EventName="PopupClosed" />
+                    </dxmvvm:Interaction.Triggers>
+                </dxe:ComboBoxEdit>
+
+                <TextBlock FontSize="10" Margin="5,0,0,0" VerticalAlignment="Center" Visibility="{Binding IsValidationVisible, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}, Converter={StaticResource boolToVis}}">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                             Value="RequiredAndEmpty">
+                                    <Setter Property="Text" Value="*" />
+                                    <Setter Property="FontSize" Value="12" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                             Value="Valid">
+                                    <Setter Property="Text" Value="&#x2713;" />
+                                    <Setter Property="FontSize" Value="10" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsValid, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}" 
+                                             Value="Invalid">
+                                    <Setter Property="Text" Value="&#x2717;" />
+                                    <Setter Property="FontSize" Value="10" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+            </StackPanel>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="comboWithCheckboxesInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="1" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, 
+                    AncestorType={x:Type gt:CustomComboEdit}}}" 
+                   Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                   Height="23"
+                   Visibility="{Binding HorizontalLabel, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}, 
+                    Converter={StaticResource boolToVis}}"/>
+            <Label Grid.Column="1" Grid.Row="0" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, 
+                    AncestorType={x:Type gt:CustomComboEdit}}}" 
+                   Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                   Height="{Binding LabelHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                   Visibility="{Binding HorizontalLabel, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}, 
+                    Converter={StaticResource invertBoolToVis}}"/>
+
+            <dxe:ComboBoxEdit x:Name="comboInput" 
+                              Grid.Column="1" Grid.Row="1"
+                              Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                              Height="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomComboEdit}}}"
+                              ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" 
+                              EditValue="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay,RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                              DisplayMember="{Binding DisplayMember, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                              Tag="{Binding Path=ComboBoxEditTag, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                              IsTextEditable="{Binding IsTextEditable, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                              Foreground="{Binding ComboForeground, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                              FontWeight="{Binding FontWeight, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}"
+                              ShowEditorButtons="{Binding IsEditorShown, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}">
+                <dxe:ComboBoxEdit.StyleSettings>
+                    <gt:EnhancedCheckedComboBoxStyleSettings />
+                </dxe:ComboBoxEdit.StyleSettings>
+
+                <dxmvvm:Interaction.Triggers>
+                    <dxmvvm:EventToCommand PassEventArgsToCommand="True" Command="{Binding PopupOpeningCommand, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" EventName="PopupOpened" />
+                    <dxmvvm:EventToCommand PassEventArgsToCommand="True" Command="{Binding PopupClosingCommand, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomComboEdit}}}" EventName="PopupClosed" />
+                </dxmvvm:Interaction.Triggers>
+            </dxe:ComboBoxEdit>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="dateTimeInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Height="23" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}" IsTabStop="False" />
+            <dxe:TextEdit x:Name="dateTimeInput" 
+                          Grid.Column="1" 
+                          IsReadOnly="{Binding IsReadOnly, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDateEdit}}}" 
+                          Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}" 
+                          EditValue="{Binding Date, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDateEdit}}}" 
+                          Mask="{Binding DateMask, Mode=OneWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDateEdit}}}" 
+                          NullText="{Binding DateMask, Mode=OneWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDateEdit}}}" 
+                          MaskAutoComplete="Strong" 
+                          MaskShowPlaceHolders="True" 
+                          MaskUseAsDisplayFormat="True" 
+                          MaskType="DateTime" />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="dateTimeWithCalendarInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="1" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}" 
+                   Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}"
+                   Height="23"
+                   HorizontalAlignment="Left" IsTabStop="False" 
+                   Visibility="{Binding HorizontalLabel, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type gt:CustomInput}}, 
+                    Converter={StaticResource boolToVis}}"/>
+            <Label Grid.Column="1" Grid.Row="0" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}" 
+                   Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}"
+                   Height="{Binding LabelHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}"
+                   HorizontalAlignment="Left" IsTabStop="False"
+                   Visibility="{Binding HorizontalLabel, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}, 
+                    Converter={StaticResource invertBoolToVis}}"/>
+            <ContentControl Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" IsTabStop="False"
+                            DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsRequiredField, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                AncestorType={x:Type gt:CustomInput}}}" Value="False">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <dxe:DateEdit x:Name="dateTimeCalendarInput" dx:ThemeManager.ThemeName="Office2013DarkGray"
+                                                Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}" 
+                                                Height="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}"
+                                                EditValue="{Binding Date, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDateEdit}}}" 
+                                                Mask="{Binding DateMask, Mode=OneWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDateEdit}}}" 
+                                                MaskAutoComplete="Strong" MaskShowPlaceHolders="True" MaskUseAsDisplayFormat="True" IsTabStop="True"
+                                                NullText="{Binding DateMask, Mode=OneWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDateEdit}}}" 
+                                                MaskType="DateTime" ShowEditorButtons="True" 
+                                                ToolTip="{Binding ErrorText, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomInput}}}"/>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsRequiredField, RelativeSource={RelativeSource Mode=FindAncestor, 
+                                AncestorType={x:Type gt:CustomInput}}}" Value="True">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Border BorderBrush="Red" BorderThickness="2">
+                                                <dxe:DateEdit x:Name="dateTimeCalendarInput" dx:ThemeManager.ThemeName="Office2013DarkGray"
+                                                Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}" 
+                                                Height="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}"
+                                                EditValue="{Binding Date, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDateEdit}}}" 
+                                                Mask="{Binding DateMask, Mode=OneWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDateEdit}}}" 
+                                                MaskAutoComplete="Strong" MaskShowPlaceHolders="True" MaskUseAsDisplayFormat="True" IsTabStop="True"
+                                                NullText="{Binding DateMask, Mode=OneWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDateEdit}}}" 
+                                                MaskType="DateTime" ShowEditorButtons="True"  
+                                                ToolTip="{Binding ErrorText, RelativeSource={RelativeSource AncestorType={x:Type gt:CustomInput}}}"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="dateTimeWithCalendarAndTimeInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}" 
+                   Height="23"/>
+            <gt:DateTimeEdit x:Name="dateTimeCalendarInput" dx:ThemeManager.ThemeName="Office2013DarkGray" 
+                          Grid.Column="1"
+                          IsShowTimePanel="True"
+                          Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}" 
+                          EditValue="{Binding Date, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDateEdit}}}"
+                          Mask="{Binding DateMask, Mode=OneWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDateEdit}}}" 
+                          MaskAutoComplete="Strong" 
+                          MaskShowPlaceHolders="True" 
+                          MaskUseAsDisplayFormat="True"
+                          NullText="{Binding DateMask, Mode=OneWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomDateEdit}}}" 
+                          MaskType="DateTime" ShowEditorButtons="True"  />
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="checkboxInputField">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition >
+                    <ColumnDefinition.Style>
+                        <Style TargetType="ColumnDefinition">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HorizontalLabel, 
+                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}" Value="True">
+                                    <Setter Property="Width" Value="{Binding LabelWidth, 
+                                        RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding HorizontalLabel, 
+                                    RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}" Value="False">
+                                    <Setter Property="Width" Value="0"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ColumnDefinition.Style>
+                </ColumnDefinition>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Grid.Column="0" Grid.Row="1" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}" 
+                   Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}" Height="23"
+                   IsTabStop="False" HorizontalAlignment="Left" Visibility="{Binding HorizontalLabel, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}, Converter={StaticResource boolToVis}}"/>
+            <Label Grid.Column="1" Grid.Row="0" Content="{Binding Label, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}" 
+                   Width="{Binding LabelWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}"
+                   IsTabStop="False" HorizontalAlignment="Left" Visibility="{Binding VerticalLabel, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}, Converter={StaticResource boolToVis}}"/>
+            <dxe:CheckEdit Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" IsTabStop="True"
+                          Width="{Binding ContentWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}"
+                          Height="{Binding ContentHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomInput}}}"
+                          IsChecked="{Binding IsChecked, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomCheckEdit}}}"
+                          IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomCheckEdit}}}" 
+                          IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type gt:CustomCheckEdit}}}"/>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

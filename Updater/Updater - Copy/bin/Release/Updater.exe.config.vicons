@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <configSections>
+    <section name="log4net" type="log4net.Config.Log4NetConfigurationSectionHandler, log4net" />
+  </configSections>
+  <log4net>
+    <appender name="RollingFileAppender" type="log4net.Appender.RollingFileAppender">
+      <file type="log4net.Util.PatternString" value="C:\\temp\\Updater\\Updater.log" />
+      <appendToFile value="true" />
+      <rollingStyle value="Size" />
+      <maxSizeRollBackups value="-1" />
+      <maximumFileSize value="10MB" />
+      <staticLogFileName value="true" />
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="%date [%thread] %level %message%newline%exception" />
+      </layout>
+    </appender>
+    <appender name="ErrorFileAppender" type="log4net.Appender.RollingFileAppender">
+      <file value="c:\\temp\\Updater\\UpdaterDebug.log" />
+      <appendToFile value="false" />
+      <rollingStyle value="Size" />
+      <maxSizeRollBackups value="-1" />
+      <maximumFileSize value="10MB" />
+      <staticLogFileName value="true" />
+      <layout type="log4net.Layout.PatternLayout">
+        <conversionPattern value="%date [%thread] %level %message%newline%exception" />
+      </layout>
+    </appender>
+    <logger name="Updater">
+      <level value="DEBUG" />
+      <param name="Threshold" value="DEBUG" />
+      <appender-ref ref="RollingFileAppender" />
+    </logger>
+  </log4net>
+  <!--<log4net>
+    <appender name="RollingFileAppender" type="log4net.Appender.RollingFileAppender">
+      <file value="${HOMEDRIVE}\\temp\\Updater.log" />
+      <appendToFile value="true" />
+      <maxSizeRollBackups value="30" />
+      <maximumFileSize value="5MB" />
+      <rollingStyle value="Size" />
+      
+      <staticLogFileName value="false" />
+      <lockingModel type="log4net.Appender.FileAppender+MinimalLock" />
+      <layout type="log4net.Layout.PatternLayout">
+        <param name="ConversionPattern" value="%date{yyyy-MM-dd HH:mm:ss.ffff} [%2thread] %-5level %20.20type{1}.%-25method at %-4line| (%-30.30logger) %message%newline" />
+      </layout>
+
+      <filter type="log4net.Filter.LevelRangeFilter">
+        <levelMin value="INFO" />
+        <levelMax value="INFO" />
+      </filter>
+    </appender>
+  </log4net>-->
+  <appSettings>
+    <add key="DBServer" value="10.1.10.206"/>
+    <add key="DBUser" value="ViconsUser"/>
+    <add key="DBPwd" value="/Vicons4u"/>
+    <add key="DBName" value="valo_db"/>
+  </appSettings>
+    <startup> 
+        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.6.1"/>
+    </startup>
+</configuration>

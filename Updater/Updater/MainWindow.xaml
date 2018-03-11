@@ -1,0 +1,125 @@
+﻿<Window x:Class="Updater.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:gt="clr-namespace:GUITools;assembly=GUITools"
+        xmlns:local="clr-namespace:Updater"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="550" Width="1375">
+    <Window.Resources>
+        <Color x:Key="customBlue"  A="255"   R="54" G="95" B="177"  />
+        <SolidColorBrush x:Key="customBlueBrush" Color="{StaticResource customBlue}"></SolidColorBrush>
+        <SolidColorBrush x:Key="customBlueBrushOpacity" Color="LightGray" Opacity="0.11"></SolidColorBrush>
+
+        <Style TargetType="Button">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter Property="Background" Value="LightBlue"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="noStyleToListboxItem" TargetType="ListBoxItem">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="MinHeight" Value="20" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border>
+                            <ContentPresenter></ContentPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="93*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" >
+            <gt:CustomTextEdit ContentTemplate="{StaticResource textInputField}" IsTabStop="False"
+                               Margin="3" Text="{Binding Path=Search, Mode=TwoWay}" Label="{Binding SearchOption}" LabelHeight="15" LabelWidth="45"
+                               ContentWidth="165" ContentHeight="15" HorizontalLabel="True" VerticalLabel="False">
+                <gt:CustomTextEdit.InputBindings>
+                    <KeyBinding Key="Return" Command="{Binding CmdSearch}" />
+                </gt:CustomTextEdit.InputBindings>
+            </gt:CustomTextEdit>
+            <Button Content="Search" Command="{Binding CmdSearch}" HorizontalAlignment="Stretch"
+                    Margin="5,0,0,0" FontWeight="Bold"/>
+            <gt:CustomComboEdit ContentTemplate="{StaticResource comboInputField}" IsTabStop="False"
+                                Margin="3" Label="Search Options" LabelHeight="15" LabelWidth="90" ItemsSource="{Binding SearchOptions}"
+                                SelectedItem="{Binding SearchOption, Mode=TwoWay}" ContentWidth="60"/>
+            <Button Content="Bulk Update" Margin="5,0,0,0" Command="{Binding CmdBulkUpdate}" FontWeight="Bold"
+                    MinWidth="80" HorizontalAlignment="Stretch"/>
+            <Grid HorizontalAlignment="Right" MinWidth="380">
+                <Button Content="Save" Margin="5,0,0,0" Command="{Binding CmdSave}" FontWeight="Bold" 
+                    MinWidth="60" HorizontalAlignment="Right"/>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Stretch">
+            <ListBox  MaxHeight="500" ItemsSource="{Binding DistributorDataList}" Background="{StaticResource customBlueBrushOpacity}"  
+                      x:Name="DistributorsListBox" ItemContainerStyle="{StaticResource noStyleToListboxItem}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10*"/>
+                                <ColumnDefinition Width="40*"/>
+                                <ColumnDefinition Width="40*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border BorderThickness="0,0,0,1" BorderBrush="Black" Grid.Column="0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="5*"/>
+                                        <RowDefinition Height="95*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Background="{StaticResource customBlueBrush}" Text="UPC" Grid.Row="0" 
+                                               Foreground="White" HorizontalAlignment="Stretch" TextAlignment="Center"/>
+                                    <TextBlock Grid.Column="0" Text="{Binding UPC}" HorizontalAlignment="Center" 
+                                               VerticalAlignment="Center" Grid.Row="1"/>
+                                </Grid>
+                            </Border>
+                            <Border BorderThickness="1,1,1,1" Grid.Column="1">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="5*"/>
+                                        <RowDefinition Height="95*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Background="{StaticResource customBlueBrush}" Text="Marketplace Data" Grid.Row="0" 
+                                               Foreground="White" HorizontalAlignment="Stretch" TextAlignment="Center"/>
+                                    <DataGrid Name="marketData" Grid.Column="1" 
+                                              ItemsSource="{Binding MarketplaceData, UpdateSourceTrigger=PropertyChanged}" FontSize="14" 
+                                              Grid.Row="1" gt:DataGridExtension.Columns="{Binding MarketplaceDataColumns}" 
+                                              AutoGenerateColumns="False" CanUserAddRows="False"/>
+                                    
+                                </Grid>
+                            </Border>
+                            <Border BorderThickness="1,1,1,1" Grid.Column="2">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="5*"/>
+                                        <RowDefinition Height="95*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Background="{StaticResource customBlueBrush}" Text="Distributor Data" Grid.Row="0" 
+                                               Foreground="White" HorizontalAlignment="Stretch" TextAlignment="Center"/>
+                                    <DataGrid Name="distributorData" Grid.Column="1" 
+                                              ItemsSource="{Binding DistData, UpdateSourceTrigger=PropertyChanged}" FontSize="14" 
+                                              Grid.Row="1" gt:DataGridExtension.Columns="{Binding DistributorDataColumns}" 
+                                              AutoGenerateColumns="False" CanUserAddRows="False"/>
+                                </Grid>
+                            </Border>
+                            
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,17 @@
+C:\projects\ValoGUI\Updater\CommonTools\bin\Debug\CommonTools.dll
+C:\projects\ValoGUI\Updater\CommonTools\bin\Debug\CommonTools.pdb
+C:\projects\ValoGUI\Updater\CommonTools\obj\Debug\CommonTools.Properties.Resources.resources
+C:\projects\ValoGUI\Updater\CommonTools\obj\Debug\CommonTools.csproj.GenerateResource.Cache
+C:\projects\ValoGUI\Updater\CommonTools\obj\Debug\CommonTools.dll
+C:\projects\ValoGUI\Updater\CommonTools\obj\Debug\CommonTools.pdb
+C:\projects\ValoGUI\Updater\CommonTools\bin\Debug\Microsoft.Practices.Prism.dll
+C:\projects\ValoGUI\Updater\CommonTools\bin\Debug\Microsoft.Practices.Prism.xml
+C:\projects\ValoGUI\Updater\CommonTools\obj\Debug\CommonTools.csprojResolveAssemblyReference.cache
+C:\projects\ValoGUI\CommonTools\bin\Debug\CommonTools.dll
+C:\projects\ValoGUI\CommonTools\bin\Debug\CommonTools.pdb
+C:\projects\ValoGUI\CommonTools\bin\Debug\Microsoft.Practices.Prism.dll
+C:\projects\ValoGUI\CommonTools\bin\Debug\Microsoft.Practices.Prism.xml
+C:\projects\ValoGUI\CommonTools\obj\Debug\CommonTools.Properties.Resources.resources
+C:\projects\ValoGUI\CommonTools\obj\Debug\CommonTools.csproj.GenerateResource.Cache
+C:\projects\ValoGUI\CommonTools\obj\Debug\CommonTools.dll
+C:\projects\ValoGUI\CommonTools\obj\Debug\CommonTools.pdb
